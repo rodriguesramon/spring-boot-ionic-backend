@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ramoncosta.cursomc.domain.Categoria;
 import com.ramoncosta.cursomc.repository.CategoriaRepository;
+import com.ramoncosta.cursomc.service.exceptions.ObjectNotFoundException;
+
 
 @Service
 public class CategoriaService {
@@ -15,6 +17,8 @@ public class CategoriaService {
 	
 	public Categoria find(Integer id) {
 		Optional<Categoria> categoria = repository.findById(id);
-		return categoria.orElse(null);
+		return categoria.orElseThrow(() -> new ObjectNotFoundException(
+				"Objeto não encontrado! Id: " + id 
+				+ ", Tipo: " + Categoria.class.getName()));
 	}
 }
