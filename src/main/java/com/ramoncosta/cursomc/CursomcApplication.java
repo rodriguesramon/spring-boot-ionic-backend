@@ -2,12 +2,10 @@ package com.ramoncosta.cursomc;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
 import com.ramoncosta.cursomc.domain.Categoria;
 import com.ramoncosta.cursomc.domain.Cidade;
 import com.ramoncosta.cursomc.domain.Cliente;
@@ -109,7 +107,7 @@ public class CursomcApplication implements CommandLineRunner {
 		
 		//########################################################################################
 		
-		SimpleDateFormat simpleDateFortmat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+		SimpleDateFormat simpleDateFortmat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 		
 		Pedido pedido1 = new Pedido(null, simpleDateFortmat.parse("30/09/2017 10:32"), cliente1, endereco1);
 		Pedido pedido2 = new Pedido(null, simpleDateFortmat.parse("10/10/2017 19:35"), cliente1, endereco2);
