@@ -1,23 +1,32 @@
 package com.ramoncosta.cursomc;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 import com.ramoncosta.cursomc.domain.Categoria;
 import com.ramoncosta.cursomc.domain.Cidade;
 import com.ramoncosta.cursomc.domain.Cliente;
 import com.ramoncosta.cursomc.domain.Endereco;
 import com.ramoncosta.cursomc.domain.Estado;
+import com.ramoncosta.cursomc.domain.Pagamento;
+import com.ramoncosta.cursomc.domain.PagamentoComBoleto;
+import com.ramoncosta.cursomc.domain.PagamentoComCartao;
+import com.ramoncosta.cursomc.domain.Pedido;
 import com.ramoncosta.cursomc.domain.Produto;
+import com.ramoncosta.cursomc.domain.enums.EstadoPagamento;
 import com.ramoncosta.cursomc.domain.enums.TipoCliente;
 import com.ramoncosta.cursomc.repository.CategoriaRepository;
 import com.ramoncosta.cursomc.repository.CidadeRepository;
 import com.ramoncosta.cursomc.repository.ClienteRepository;
 import com.ramoncosta.cursomc.repository.EnderecoRepository;
 import com.ramoncosta.cursomc.repository.EstadoRepository;
+import com.ramoncosta.cursomc.repository.PagamentoRepository;
+import com.ramoncosta.cursomc.repository.PedidoRepository;
 import com.ramoncosta.cursomc.repository.ProdutoRepository;
 
 @SpringBootApplication
@@ -35,6 +44,10 @@ public class CursomcApplication implements CommandLineRunner {
 	private ClienteRepository clienteRepository;
 	@Autowired
 	private EnderecoRepository enderecoRepository;
+	@Autowired
+	private PedidoRepository pedidoRepository;
+	@Autowired
+	private PagamentoRepository pagamentoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -63,14 +76,12 @@ public class CursomcApplication implements CommandLineRunner {
 		
 		Estado estado1 = new Estado(null, "Amazonas");
 		Estado estado2 = new Estado(null, "São Paulo");
-		Estado estado3 = new Estado(null, "Minas Gerais");
-		
+		Estado estado3 = new Estado(null, "Minas Gerais");		
 		
 		Cidade cidade1 = new Cidade(null, "Manaus", estado1);
 		Cidade cidade2 = new Cidade(null, "Campinas", estado2);
 		Cidade cidade3 = new Cidade(null, "Poços de Calda", estado3);
-		Cidade cidade4 = new Cidade(null, "São Paulo", estado2);
-		
+		Cidade cidade4 = new Cidade(null, "São Paulo", estado2);		
 		
 		estado1.getCidades().addAll(Arrays.asList(cidade1));
 		estado2.getCidades().addAll(Arrays.asList(cidade2, cidade4));
@@ -91,5 +102,24 @@ public class CursomcApplication implements CommandLineRunner {
 		
 		clienteRepository.saveAll(Arrays.asList(cliente1));
 		enderecoRepository.saveAll(Arrays.asList(endereco1, endereco2));
+		
+		//########################################################################################
+		
+		SimpleDateFormat simpleDateFortmat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+		
+		Pedido pedido1 = new Pedido(null, simpleDateFortmat.parse("30/09/2017 10:32"), cliente1, endereco1);
+		Pedido pedido2 = new Pedido(null, simpleDateFortmat.parse("10/10/2017 19:35"), cliente1, endereco2);
+		
+		Pagamento pagamento1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, pedido1, 6);
+		pedido1.setPagamento(pagamento1);
+		
+		Pagamento pagamento2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, pedido2, simpleDateFortmat.parse("20/10/2017 00:00"), null);
+		pedido2.setPagamento(pagamento2);
+		
+		cliente1.getPedidos().addAll(Arrays.asList(pedido1, pedido2));
+		
+		pedidoRepository.saveAll(Arrays.asList(pedido1, pedido2));
+		pagamentoRepository.saveAll(Arrays.asList(pagamento1, pagamento2));
+		
 	}
 }
