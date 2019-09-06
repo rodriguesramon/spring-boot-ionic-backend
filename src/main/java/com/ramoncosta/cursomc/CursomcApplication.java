@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
 import com.ramoncosta.cursomc.domain.Categoria;
 import com.ramoncosta.cursomc.domain.Cidade;
 import com.ramoncosta.cursomc.domain.Cliente;
