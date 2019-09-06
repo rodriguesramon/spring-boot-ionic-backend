@@ -6,12 +6,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 import com.ramoncosta.cursomc.domain.Categoria;
 import com.ramoncosta.cursomc.domain.Cidade;
+import com.ramoncosta.cursomc.domain.Cliente;
+import com.ramoncosta.cursomc.domain.Endereco;
 import com.ramoncosta.cursomc.domain.Estado;
 import com.ramoncosta.cursomc.domain.Produto;
+import com.ramoncosta.cursomc.domain.enums.TipoCliente;
 import com.ramoncosta.cursomc.repository.CategoriaRepository;
 import com.ramoncosta.cursomc.repository.CidadeRepository;
+import com.ramoncosta.cursomc.repository.ClienteRepository;
+import com.ramoncosta.cursomc.repository.EnderecoRepository;
 import com.ramoncosta.cursomc.repository.EstadoRepository;
 import com.ramoncosta.cursomc.repository.ProdutoRepository;
 
@@ -25,7 +31,11 @@ public class CursomcApplication implements CommandLineRunner {
 	@Autowired
 	private EstadoRepository estadoRepository;
 	@Autowired
-	private CidadeRepository cidadeRepository;
+	private CidadeRepository cidadeRepository;	
+	@Autowired
+	private ClienteRepository clienteRepository;
+	@Autowired
+	private EnderecoRepository enderecoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -70,5 +80,17 @@ public class CursomcApplication implements CommandLineRunner {
 		estadoRepository.saveAll(Arrays.asList(estado1, estado2, estado3));
 		cidadeRepository.saveAll(Arrays.asList(cidade1, cidade2, cidade3, cidade4));
 		
+		//########################################################################################
+		
+		Cliente cliente1 = new Cliente(null, "Ramon Costa", "ramon@gmail.com", "00000000000", TipoCliente.PESSOAFISICA);
+		cliente1.getTelefones().addAll(Arrays.asList("92 995284817", "92 35816878")) ;
+		Endereco endereco1 = new Endereco(null, "Rua São Miguel", "04", "Casa com Muro Alto", "Col. Santo Antonio", "1234", cliente1, cidade1);
+		Endereco endereco2 = new Endereco(null, "Rua ABC", "07", "Casa com Muro Alto", "Cidade Nova", "43121", cliente1, cidade2);
+		
+		cliente1.getEnderecos().addAll(Arrays.asList(endereco1, endereco2));
+		
+		
+		clienteRepository.saveAll(Arrays.asList(cliente1));
+		enderecoRepository.saveAll(Arrays.asList(endereco1, endereco2));
 	}
 }
