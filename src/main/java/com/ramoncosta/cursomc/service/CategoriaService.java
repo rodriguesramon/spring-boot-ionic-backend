@@ -1,14 +1,13 @@
 package com.ramoncosta.cursomc.service;
 
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-
 import com.ramoncosta.cursomc.domain.Categoria;
 import com.ramoncosta.cursomc.repository.CategoriaRepository;
+import com.ramoncosta.cursomc.service.exceptions.DataIntegrityException;
 import com.ramoncosta.cursomc.service.exceptions.ObjectNotFoundException;
-
 
 @Service
 public class CategoriaService {
@@ -31,5 +30,14 @@ public class CategoriaService {
 	public Categoria update(Categoria categoria) {
 		find(categoria.getId());
 		return repository.save(categoria);
+	}
+
+	public void delete(Integer id) {
+		find(id);
+		try {
+			repository.deleteById(id);			
+		} catch (DataIntegrityViolationException e) {
+			throw new DataIntegrityException("Não é possível excluir registro");
+		}
 	}
 }
