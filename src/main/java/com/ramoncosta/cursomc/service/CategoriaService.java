@@ -1,5 +1,6 @@
 package com.ramoncosta.cursomc.service;
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -39,5 +40,9 @@ public class CategoriaService {
 		} catch (DataIntegrityViolationException e) {
 			throw new DataIntegrityException("Não é possível excluir registro");
 		}
+	}
+
+	public List<Categoria> findAll() {		
+		return repository.findAll();
 	}
 }

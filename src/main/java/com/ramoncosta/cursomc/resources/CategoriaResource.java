@@ -1,6 +1,9 @@
 package com.ramoncosta.cursomc.resources;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import com.ramoncosta.cursomc.domain.Categoria;
+import com.ramoncosta.cursomc.dto.CategoriaDTO;
 import com.ramoncosta.cursomc.service.CategoriaService;
 
 @RestController
@@ -46,5 +51,14 @@ public class CategoriaResource {
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
+	}
+	
+	@RequestMapping(method=RequestMethod.GET)
+	public ResponseEntity<List<CategoriaDTO>> fingAll() {
+		List<Categoria> listaCategorias = service.findAll();
+		List<CategoriaDTO> listCategoriaDTO = listaCategorias
+				.stream()
+				.map(categoria -> new CategoriaDTO(categoria)).collect(Collectors.toList()); 
+	   	return ResponseEntity.ok().body(listCategoriaDTO);
 	}
 }
