@@ -2,14 +2,12 @@ package com.ramoncosta.cursomc.service;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
-
 import com.ramoncosta.cursomc.domain.Categoria;
 import com.ramoncosta.cursomc.dto.CategoriaDTO;
 import com.ramoncosta.cursomc.repository.CategoriaRepository;
@@ -35,10 +33,15 @@ public class CategoriaService {
 	}
 
 	public Categoria update(Categoria categoria) {
-		find(categoria.getId());
-		return repository.save(categoria);
+		Categoria newCategoria = find(categoria.getId());
+		updateData(newCategoria, categoria);
+		return repository.save(newCategoria);
 	}
 
+	private void updateData(Categoria newCategoria, Categoria categoria) {
+		newCategoria.setNome(categoria.getNome());
+	}
+	
 	public void delete(Integer id) {
 		find(id);
 		try {
