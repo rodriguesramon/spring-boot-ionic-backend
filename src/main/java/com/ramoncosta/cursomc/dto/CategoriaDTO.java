@@ -1,11 +1,8 @@
 package com.ramoncosta.cursomc.dto;
 
 import java.io.Serializable;
-
 import javax.validation.constraints.NotEmpty;
-
 import org.hibernate.validator.constraints.Length;
-
 import com.ramoncosta.cursomc.domain.Categoria;
 
 public class CategoriaDTO implements Serializable{
