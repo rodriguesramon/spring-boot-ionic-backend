@@ -23,18 +23,18 @@ import com.ramoncosta.cursomc.service.CategoriaService;
 public class CategoriaResource {
 	
 	@Autowired
-	private CategoriaService service;
+	private CategoriaService categoriaService;
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
 	public ResponseEntity<Categoria> find(@PathVariable Integer id) {
-		Categoria categoria = service.find(id);
+		Categoria categoria = categoriaService.find(id);
 	   	return ResponseEntity.ok().body(categoria);
 	}
 	
 	@RequestMapping(method=RequestMethod.POST)
 	public ResponseEntity<Void> insert(@Valid @RequestBody CategoriaDTO categoriaDTO) {
-		Categoria categoria = service.fromDTO(categoriaDTO);
-		categoria= service.insert(categoria);		
+		Categoria categoria = categoriaService.fromDTO(categoriaDTO);
+		categoria= categoriaService.insert(categoria);		
 		URI uri = ServletUriComponentsBuilder
 				.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(categoria.getId())
@@ -44,21 +44,21 @@ public class CategoriaResource {
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> update(@Valid @RequestBody CategoriaDTO categoriaDTO, @PathVariable Integer id){
-		Categoria categoria = service.fromDTO(categoriaDTO);
+		Categoria categoria = categoriaService.fromDTO(categoriaDTO);
 		categoria.setId(id);
-		categoria = service.update(categoria);
+		categoria = categoriaService.update(categoria);
 		return ResponseEntity.noContent().build();
 	}
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
-		service.delete(id);
+		categoriaService.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 	
 	@RequestMapping(method=RequestMethod.GET)
 	public ResponseEntity<List<CategoriaDTO>> findAll() {
-		List<Categoria> listaCategorias = service.findAll();
+		List<Categoria> listaCategorias = categoriaService.findAll();
 		List<CategoriaDTO> listaCategoriaDTO = listaCategorias
 				.stream()
 				.map(categoria -> new CategoriaDTO(categoria)).collect(Collectors.toList()); 
@@ -71,7 +71,7 @@ public class CategoriaResource {
 			@RequestParam(value="linesPerPage", defaultValue = "24") Integer linesPerPage, 
 			@RequestParam(value="orderBy", defaultValue = "nome") String orderBy, 
 			@RequestParam(value="direction", defaultValue = "ASC") String direction) {
-		Page<Categoria> listaCategorias = service.findPage(page, linesPerPage, orderBy, direction);
+		Page<Categoria> listaCategorias = categoriaService.findPage(page, linesPerPage, orderBy, direction);
 		Page<CategoriaDTO> listaCategoriaDTO = listaCategorias
 				.map(categoria -> new CategoriaDTO(categoria)); 
 	   	return ResponseEntity.ok().body(listaCategoriaDTO);
