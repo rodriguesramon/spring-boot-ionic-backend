@@ -20,6 +20,7 @@ import com.ramoncosta.cursomc.domain.PagamentoComCartao;
 import com.ramoncosta.cursomc.domain.Pedido;
 import com.ramoncosta.cursomc.domain.Produto;
 import com.ramoncosta.cursomc.domain.enums.EstadoPagamento;
+import com.ramoncosta.cursomc.domain.enums.Perfil;
 import com.ramoncosta.cursomc.domain.enums.TipoCliente;
 import com.ramoncosta.cursomc.repository.CategoriaRepository;
 import com.ramoncosta.cursomc.repository.CidadeRepository;
@@ -122,16 +123,23 @@ public class DBService {
 		
 		//########################################################################################
 		
-		Cliente cliente1 = new Cliente(null, "Ramon Costa", "ramon@gmail.com", "00000000000", TipoCliente.PESSOAFISICA, passwordEncode.encode("123"));
+		Cliente cliente1 = new Cliente(null, "Ramon Costa", "ramon@gmail.com", "44562359005", TipoCliente.PESSOAFISICA, passwordEncode.encode("123"));
+		Cliente cliente2 = new Cliente(null, "Juan Rodrigues", "juan@gmail.com", "30433968044", TipoCliente.PESSOAFISICA, passwordEncode.encode("123"));
+		cliente2.addPerfil(Perfil.ADMIN);
+		
 		cliente1.getTelefones().addAll(Arrays.asList("92 995284817", "92 35816878")) ;
-		Endereco endereco1 = new Endereco(null, "Rua São Miguel", "04", "Casa com Muro Alto", "Col. Santo Antonio", "1234", cliente1, cidade1);
+		cliente2.getTelefones().addAll(Arrays.asList("92 991474117", "92 35816878")) ;
+		
+		Endereco endereco1 = new Endereco(null, "Rua São Miguel", "332", "Casa com Muro Alto", "Col. Santo Antonio", "1234", cliente1, cidade1);
 		Endereco endereco2 = new Endereco(null, "Rua ABC", "07", "Casa com Muro Alto", "Cidade Nova", "43121", cliente1, cidade2);
+		Endereco endereco3 = new Endereco(null, "Travessa São Tomé", "04", "Casa com Muro Alto", "Col. Santo Antonio", "1234", cliente2, cidade1);
 		
 		cliente1.getEnderecos().addAll(Arrays.asList(endereco1, endereco2));
+		cliente2.getEnderecos().addAll(Arrays.asList(endereco3));
 		
 		
-		clienteRepository.saveAll(Arrays.asList(cliente1));
-		enderecoRepository.saveAll(Arrays.asList(endereco1, endereco2));
+		clienteRepository.saveAll(Arrays.asList(cliente1, cliente2));
+		enderecoRepository.saveAll(Arrays.asList(endereco1, endereco2, endereco3));
 		
 		//########################################################################################
 		
