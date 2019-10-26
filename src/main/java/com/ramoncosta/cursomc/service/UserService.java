@@ -9,7 +9,6 @@ public class UserService {
 			return (UserSS) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		}catch(Exception erro) {
 			return null;
-		}
-		
+		}		
 	}
 }

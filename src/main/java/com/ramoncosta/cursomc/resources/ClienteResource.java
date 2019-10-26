@@ -28,18 +28,18 @@ import com.ramoncosta.cursomc.service.ClienteService;
 public class ClienteResource {
 	
 	@Autowired
-	private ClienteService service;
+	private ClienteService clienteService;
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
 	public ResponseEntity<Cliente> fing(@PathVariable Integer id) {
-		Cliente cliente = service.find(id);
+		Cliente cliente = clienteService.find(id);
 		return ResponseEntity.ok().body(cliente);
 	}
 	
 	@RequestMapping(method=RequestMethod.POST)
 	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO clienteDTO) {
-		Cliente cliente = service.fromDTO(clienteDTO);
-		cliente= service.insert(cliente);		
+		Cliente cliente = clienteService.fromDTO(clienteDTO);
+		cliente= clienteService.insert(cliente);		
 		URI uri = ServletUriComponentsBuilder
 				.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(cliente.getId())
@@ -49,23 +49,23 @@ public class ClienteResource {
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> update(@Valid @RequestBody ClienteDTO clienteDTO, @PathVariable Integer id){
-		Cliente cliente = service.fromDTO(clienteDTO);
+		Cliente cliente = clienteService.fromDTO(clienteDTO);
 		cliente.setId(id);
-		cliente = service.update(cliente);
+		cliente = clienteService.update(cliente);
 		return ResponseEntity.noContent().build();
 	}
 	
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
-		service.delete(id);
+		clienteService.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 	
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(method=RequestMethod.GET)
 	public ResponseEntity<List<ClienteDTO>> findAll() {
-		List<Cliente> listaClientes = service.findAll();
+		List<Cliente> listaClientes = clienteService.findAll();
 		List<ClienteDTO> listaClienteDTO = listaClientes
 				.stream()
 				.map(cliente -> new ClienteDTO(cliente)).collect(Collectors.toList()); 
@@ -79,7 +79,7 @@ public class ClienteResource {
 			@RequestParam(value="linesPerPage", defaultValue = "24") Integer linesPerPage, 
 			@RequestParam(value="orderBy", defaultValue = "nome") String orderBy, 
 			@RequestParam(value="direction", defaultValue = "ASC") String direction) {
-		Page<Cliente> listaClientes = service.findPage(page, linesPerPage, orderBy, direction);
+		Page<Cliente> listaClientes = clienteService.findPage(page, linesPerPage, orderBy, direction);
 		Page<ClienteDTO> listaClienteDTO = listaClientes
 				.map(cliente -> new ClienteDTO(cliente)); 
 	   	return ResponseEntity.ok().body(listaClienteDTO);
