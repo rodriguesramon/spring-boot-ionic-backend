@@ -30,7 +30,6 @@ import com.ramoncosta.cursomc.service.exceptions.AuthorizationException;
 import com.ramoncosta.cursomc.service.exceptions.DataIntegrityException;
 import com.ramoncosta.cursomc.service.exceptions.ObjectNotFoundException;
 
-
 @Service
 public class ClienteService {
 	
@@ -99,6 +98,20 @@ public class ClienteService {
 
 	public List<Cliente> findAll() {		
 		return clienteRepository.findAll();
+	}
+	
+	public Cliente findByEmail(String email) {
+		
+		UserSS user = UserService.authenticated();
+		if(user == null || !user.hasRole(Perfil.ADMIN) && !email.equals(user.getUsername())) {
+			throw new AuthorizationException("Acesso Negado");
+		}
+		
+		Cliente cliente = clienteRepository.findByEmail(email);
+		if(cliente == null) {
+			throw new ObjectNotFoundException("Objeto não encontrado: " + user.getId() + ", Tipo: " + Cliente.class.getName());
+		}
+		return cliente;
 	}
 	
 	public Page<Cliente> findPage(Integer page, Integer linesPerPage, String orderBy, String direction){
