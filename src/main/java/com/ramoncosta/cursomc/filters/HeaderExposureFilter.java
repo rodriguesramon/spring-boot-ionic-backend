@@ -15,7 +15,8 @@ public class HeaderExposureFilter implements Filter{
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		HttpServletResponse httpServletResponse = (HttpServletResponse) response; 
-		httpServletResponse.addHeader("access-control-expose-headers", "location");		
+		httpServletResponse.addHeader("access-control-expose-headers", "location");	
+		chain.doFilter(request, response);
 	}
 
 }
